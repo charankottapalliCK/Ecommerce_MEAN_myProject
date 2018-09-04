@@ -5,13 +5,13 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressHbs = require('express-handlebars');
 var mongoose = require('mongoose');
-
+var session = require('express-session');
 
 var indexRouter = require('./routes/index');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost:27017/ecommerce')
+mongoose.connect('mongodb://localhost:27017/ecommerce');
 // view engine setup
 app.engine('.hbs',expressHbs({defaultLayout: 'layout',extname:'.hbs'}));
 app.set('view engine', '.hbs');
@@ -20,6 +20,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({secret:'secretpassowrd',resave:false,saveUninitialized:false}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
